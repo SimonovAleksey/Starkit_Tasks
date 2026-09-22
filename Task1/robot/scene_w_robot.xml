@@ -1,0 +1,73 @@
+<mujoco model="Robot_and_4_balls">
+  <option gravity="0 0 -9.81" timestep="0.002"/>
+
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512" height="512"/>
+    <texture name="grid" type="2d" builtin="checker" rgb1="0.2 0.2 0.2" rgb2="0.3 0.3 0.3" width="300" height="300"/>
+    <material name="grid" texture="grid" texrepeat="5 5" reflectance="0.2"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 3" dir="0 0 -1" diffuse="1 1 1"/>
+
+    <geom name="floor" type="plane" size="2.5 2.5 1" material="grid" friction="0.6 0.005 0.001"/>
+
+    <body name="ball_blue" pos="2.1 -0.35 0.05">
+      <freejoint/>
+      <geom type="sphere" size="0.05" rgba="0 0.2 1 1" mass="0.05" friction="0.6 0.005 0.001"/>
+    </body>
+
+    <body name="ball_red" pos="2.0 -0.10 0.05">
+      <freejoint/>
+      <geom type="sphere" size="0.05" rgba="1 0 0 1" mass="0.05" friction="0.6 0.005 0.001"/>
+    </body>
+
+    <body name="ball_yellow" pos="1.95 0.05 0.05">
+      <freejoint/>
+      <geom type="sphere" size="0.05" rgba="1 0.9 0 1" mass="0.05" friction="0.6 0.005 0.001"/>
+    </body>
+
+    <body name="ball_green" pos="2.8 0.35 0.05">
+      <freejoint/>
+      <geom type="sphere" size="0.05" rgba="0 0.8 0 1" mass="0.05" friction="0.6 0.005 0.001"/>
+    </body>
+
+    <!-- робот -->
+    <body name="chassis" pos="0 0 0.09">
+      <freejoint/>
+
+      <site name="chassis_imu" pos="0 0 0" size="0.01"/>
+
+      <geom name="chassis_box" type="box" size="0.15 0.10 0.05" mass="5" rgba="0.2 0.6 0.2 1"/>
+
+      <geom name="camera_mast" type="cylinder" size="0.01 0.28" pos="0 0 0.33" mass="0.3" rgba="0.3 0.3 0.3 1"/>
+      <camera name="front_cam" pos="0 0 0.61" xyaxes="0 -1 0 0.2588 0 0.9659"/>
+
+      <geom name="skid_front" type="sphere" size="0.02" pos="0.14 0 -0.06" mass="0.05" friction="0.1 0.005 0.0001" rgba="0.1 0.1 0.1 1"/>
+      <geom name="skid_back" type="sphere" size="0.02" pos="-0.14 0 -0.06" mass="0.05" friction="0.1 0.005 0.0001" rgba="0.1 0.1 0.1 1"/>
+
+      <body name="wheel_left" pos="0 0.13 -0.01">
+        <joint name="wheel_left_joint" type="hinge" axis="0 1 0" damping="0.05" armature="0.01"/>
+        <geom name="wheel_left_geom" type="cylinder" size="0.08 0.02" quat="0.707107 0.707107 0 0"
+              mass="0.8" friction="1.2 0.01 0.0001" rgba="0.05 0.05 0.05 1"/>
+      </body>
+
+      <body name="wheel_right" pos="0 -0.13 -0.01">
+        <joint name="wheel_right_joint" type="hinge" axis="0 1 0" damping="0.05" armature="0.01"/>
+        <geom name="wheel_right_geom" type="cylinder" size="0.08 0.02" quat="0.707107 0.707107 0 0"
+              mass="0.8" friction="1.2 0.01 0.0001" rgba="0.05 0.05 0.05 1"/>
+      </body>
+    </body>
+
+  </worldbody>
+
+  <sensor>
+    <gyro name="chassis_gyro" site="chassis_imu"/>
+  </sensor>
+
+  <actuator>
+    <velocity name="left_wheel" joint="wheel_left_joint" kv="1" ctrlrange="-20 20"/>
+    <velocity name="right_wheel" joint="wheel_right_joint" kv="1" ctrlrange="-20 20"/>
+  </actuator>
+
+</mujoco>
